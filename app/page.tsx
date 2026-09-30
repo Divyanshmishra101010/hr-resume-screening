@@ -810,8 +810,9 @@ function Workspace() {
     const recordCriteria = criteriaRecords.filter((record) => record.job_id === selectedJobId)
     if (!sampleData) {
       if (recordCriteria.length > 0) {
-        setCriteriaDraft(recordCriteria.map((record) => ({ criterion_id: record.id, label: record.name, criterion_type: record.criterion_type, minimum_match: record.minimum_match, weight: record.weight, approved: record.approved, job_relevance_note: record.description || 'Job relevance note not provided.' })))
-        setCriteriaApproval(recordCriteria.every((record) => record.approved) ? 'approved' : 'pending')
+        const uniqueCriteria = Array.from(new Map(recordCriteria.map((record) => [record.name.trim().toLowerCase(), record])).values())
+        setCriteriaDraft(uniqueCriteria.map((record) => ({ criterion_id: record.id, label: record.name, criterion_type: record.criterion_type, minimum_match: record.minimum_match, weight: record.weight, approved: record.approved, job_relevance_note: record.description || 'Job relevance note not provided.' })))
+        setCriteriaApproval(uniqueCriteria.every((record) => record.approved) ? 'approved' : 'pending')
       } else {
         setCriteriaDraft([])
         setCriteriaApproval('pending')
@@ -857,7 +858,10 @@ function Workspace() {
   }
 
   const visibleJobs = useMemo(() => sampleData ? [...jobs, ...sampleJobs.filter((sample) => !jobs.some((job) => job.id === sample.id))] : jobs, [jobs, sampleData])
-  const visibleCriteria = useMemo(() => sampleData && criteriaDraft.length === 0 ? sampleCriteria : criteriaDraft, [criteriaDraft, sampleData])
+  const visibleCriteria = useMemo(() => {
+    const source = sampleData && criteriaDraft.length === 0 ? sampleCriteria : criteriaDraft
+    return Array.from(new Map(source.map((criterion) => [criterion.label.trim().toLowerCase() || criterion.criterion_id, criterion])).values())
+  }, [criteriaDraft, sampleData])
   const roleCandidates = useMemo(() => roleApplications.flatMap((packet) => packet.candidate ? [{ ...packet.candidate, application_id: packet.application.id, application_stage: packet.application.stage }] : []), [roleApplications])
   const roleAssessments = useMemo(() => roleApplications.filter((packet) => packet.candidate && packet.assessment).map((packet) => {
     const metadata = packet.application.metadata && typeof packet.application.metadata === 'object' ? packet.application.metadata : {}
@@ -889,12 +893,16 @@ function Workspace() {
     if (!selectedJobId || selectedJobId.startsWith('role-')) throw new Error('Select a saved role before editing criteria.')
     const saved: Criterion[] = []
     for (const criterion of criteria) {
-      const existing = criteriaRecords.find((record) => record.id === criterion.criterion_id)
-      const response = await authFetch('/api/job_criteria', { method: existing ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...(existing ? { id: existing.id } : { job_id: selectedJobId }), name: criterion.label.trim(), criterion_type: criterion.criterion_type, minimum_match: criterion.minimum_match, description: criterion.job_relevance_note.trim(), weight: criterion.weight, approved }) })
+      const existing = !criterion.criterion_id.startsWith('new-')
+      const response = await authFetch('/api/job_criteria', { method: existing ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...(existing ? { id: criterion.criterion_id } : { job_id: selectedJobId }), name: criterion.label.trim(), criterion_type: criterion.criterion_type, minimum_match: criterion.minimum_match, description: criterion.job_relevance_note.trim(), weight: criterion.weight, approved }) })
       const body = await response.json() as unknown
       if (!response.ok || !isRecord(body) || body.success !== true || !isRecord(body.data)) throw new Error(isRecord(body) && typeof body.error === 'string' ? body.error : `Could not save ${criterion.label}`)
       saved.push({ criterion_id: asText(body.data.id), label: asText(body.data.name), criterion_type: asText(body.data.criterion_type, criterion.criterion_type) as CriteriaType, minimum_match: Number(body.data.minimum_match ?? criterion.minimum_match), weight: Number(body.data.weight ?? criterion.weight), approved: body.data.approved === true, job_relevance_note: asText(body.data.description) })
     }
+    const savedIds = new Set(saved.map((criterion) => criterion.criterion_id))
+    const savedNames = new Set(saved.map((criterion) => criterion.label.trim().toLowerCase()))
+    const staleDuplicates = criteriaRecords.filter((record) => record.job_id === selectedJobId && savedNames.has(record.name.trim().toLowerCase()) && !savedIds.has(record.id))
+    for (const duplicate of staleDuplicates) await authFetch(`/api/job_criteria?id=${encodeURIComponent(duplicate.id)}`, { method: 'DELETE' })
     await loadWorkspace(false)
     setCriteriaDraft(saved)
     return saved
@@ -953,8 +961,7 @@ function Workspace() {
     try {
       const saved = await saveCriteria(visibleCriteria, true)
       setCriteriaApproval('approved')
-      const result = await runOrchestrator(`Record approval of the recruiter-edited criteria for role ${selectedJobId}. These persisted criteria are explicitly approved: ${JSON.stringify(saved)}. Confirm job relevance, exclude protected or proxy attributes, preserve prior assessments, and return the complete orchestration response.`)
-      if (result) setOrchestratorData(result)
+      await authFetch('/api/audit_events', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'criteria_approved', entity_type: 'job', entity_id: selectedJobId, details: { criteria_count: saved.length, weight_total: 100 } }) })
       toast.success('Criteria approved. Continue to Intake to add resumes.')
     } catch (error) { toast.error(error instanceof Error ? error.message : 'Criteria approval failed') } finally { setCriteriaBusy(false) }
   }
