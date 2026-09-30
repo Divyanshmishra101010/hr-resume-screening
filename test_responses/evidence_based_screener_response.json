@@ -1,0 +1,14 @@
+{
+  "agent_id": "6abc7b6bbb0e214159113204",
+  "agent_name": "Evidence-Based Screener",
+  "response": {
+    "result": {
+      "module_outputs": {},
+      "response": "{\n  \"status\": \"success\",\n  \"result\": {\n    \"workflow_status\": \"criteria_draft\",\n    \"role_id\": \"genai_dev_001\",\n    \"criteria_version_id\": \"v1.0\",\n    \"criteria_approval_state\": \"not_approved\",\n    \"criteria\": [\n      {\n        \"criterion_id\": \"c1\",\n        \"label\": \"Python Proficiency for API Development\",\n        \"criterion_type\": \"required\",\n        \"weight\": 35,\n        \"approved\": false,\n        \"job_relevance_note\": \"Essential for building robust, scalable backend APIs using frameworks like FastAPI or Flask.\"\n      },\n      {\n        \"criterion_id\": \"c2\",\n        \"label\": \"LLM Application Development Experience\",\n        \"criterion_type\": \"required\",\n        \"weight\": 35,\n        \"approved\": false,\n        \"job_relevance_note\": \"Direct experience in integrating Large Language Models and building applications around them is core to the role.\"\n      },\n      {\n        \"criterion_id\": \"c3\",\n        \"label\": \"Vector Database and RAG Implementation\",\n        \"criterion_type\": \"preferred\",\n        \"weight\": 20,\n        \"approved\": false,\n        \"job_relevance_note\": \"Highly relevant for enhancing LLM responses with context-aware retrieval systems.\"\n      },\n      {\n        \"criterion_id\": \"c4\",\n        \"label\": \"CI/CD and Cloud Infrastructure Knowledge\",\n        \"criterion_type\": \"preferred\",\n        \"weight\": 10,\n        \"approved\": false,\n        \"job_relevance_note\": \"Relevant for deploying and maintaining AI applications in production environments.\"\n      }\n    ],\n    \"candidate_assessments\": [],\n    \"ranking_explanation\": \"Criteria are weighted based on core technical competencies required for immediate production work on GenAI APIs.\",\n    \"material_tie_breakers\": [],\n    \"ranking_snapshot_id\": \"snap_001\",\n    \"warnings\": [],\n    \"prior_assessment_ids_preserved\": [],\n    \"approval_required\": true,\n    \"next_action\": \"approve_criteria\"\n  },\n  \"message\": \"Criteria drafted successfully. Please review and approve to begin screening.\",\n  \"metadata\": {\n    \"agent_name\": \"Evidence-Based Screener\",\n    \"timestamp\": \"2026-09-30T12:00:00Z\",\n    \"model_version\": \"anthropic/claude-sonnet-4-6\"\n  }\n}"
+    },
+    "status": "success"
+  },
+  "status": "passed",
+  "test_input": "Create draft criteria for a GenAI Developer role that builds Python APIs and LLM applications. Return job-relevant criteria with types, weights totaling 100, and relevance notes. Do not screen candidates.",
+  "timestamp": "2026-09-30T13:20:31.437886"
+}

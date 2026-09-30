@@ -1,0 +1,376 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "message": {
+      "type": "string"
+    },
+    "metadata": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_name": {
+          "type": "string"
+        },
+        "model_version": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "agent_name",
+        "timestamp",
+        "model_version"
+      ],
+      "type": "object"
+    },
+    "result": {
+      "additionalProperties": false,
+      "properties": {
+        "approval_required": {
+          "type": "boolean"
+        },
+        "candidate_assessments": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "assessment_id": {
+                "type": "string"
+              },
+              "autonomous_rejection": {
+                "const": false,
+                "type": "boolean"
+              },
+              "candidate_id": {
+                "type": "string"
+              },
+              "confidence": {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              "criterion_scores": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "confidence": {
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "number"
+                    },
+                    "criterion_id": {
+                      "type": "string"
+                    },
+                    "evidence_excerpts": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "locator": {
+                            "type": "string"
+                          },
+                          "quote": {
+                            "type": "string"
+                          },
+                          "source_id": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "quote",
+                          "source_id",
+                          "locator"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "missing_evidence": {
+                      "type": "boolean"
+                    },
+                    "protected_attribute_excluded": {
+                      "const": true,
+                      "type": "boolean"
+                    },
+                    "reasoning": {
+                      "type": "string"
+                    },
+                    "score": {
+                      "maximum": 4,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "uncertainty": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "criterion_id",
+                    "score",
+                    "evidence_excerpts",
+                    "reasoning",
+                    "confidence",
+                    "missing_evidence",
+                    "uncertainty",
+                    "protected_attribute_excluded"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "gaps": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "overall_score": {
+                "maximum": 100,
+                "minimum": 0,
+                "type": "number"
+              },
+              "rank_position": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "recommended_next_action": {
+                "enum": [
+                  "review_evidence",
+                  "advance_for_human_review",
+                  "hold_for_more_information",
+                  "resolve_warning",
+                  "none"
+                ],
+                "type": "string"
+              },
+              "required_criteria_coverage": {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              "source_ids": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "strengths": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "warnings": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "requires_human_review": {
+                      "type": "boolean"
+                    },
+                    "severity": {
+                      "enum": [
+                        "info",
+                        "warning",
+                        "blocking"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "severity",
+                    "requires_human_review"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "candidate_id",
+              "source_ids",
+              "assessment_id",
+              "overall_score",
+              "required_criteria_coverage",
+              "confidence",
+              "rank_position",
+              "criterion_scores",
+              "strengths",
+              "gaps",
+              "warnings",
+              "recommended_next_action",
+              "autonomous_rejection"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "criteria": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "approved": {
+                "type": "boolean"
+              },
+              "criterion_id": {
+                "type": "string"
+              },
+              "criterion_type": {
+                "enum": [
+                  "required",
+                  "preferred",
+                  "disqualifying",
+                  "contextual"
+                ],
+                "type": "string"
+              },
+              "job_relevance_note": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "weight": {
+                "minimum": 0,
+                "type": "number"
+              }
+            },
+            "required": [
+              "criterion_id",
+              "label",
+              "criterion_type",
+              "weight",
+              "approved",
+              "job_relevance_note"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "criteria_approval_state": {
+          "enum": [
+            "not_approved",
+            "approved",
+            "changed_requires_reapproval"
+          ],
+          "type": "string"
+        },
+        "criteria_version_id": {
+          "type": "string"
+        },
+        "material_tie_breakers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "next_action": {
+          "enum": [
+            "approve_criteria",
+            "review_scores",
+            "resolve_warnings",
+            "rerun_after_criteria_change",
+            "human_decision",
+            "none"
+          ],
+          "type": "string"
+        },
+        "prior_assessment_ids_preserved": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "ranking_explanation": {
+          "type": "string"
+        },
+        "ranking_snapshot_id": {
+          "type": "string"
+        },
+        "role_id": {
+          "type": "string"
+        },
+        "warnings": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "requires_human_review": {
+                "type": "boolean"
+              },
+              "severity": {
+                "enum": [
+                  "info",
+                  "warning",
+                  "blocking"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "severity",
+              "requires_human_review"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "workflow_status": {
+          "enum": [
+            "criteria_draft",
+            "criteria_approval_required",
+            "screening_completed",
+            "rerank_completed",
+            "human_review_required",
+            "blocked",
+            "error"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "workflow_status",
+        "role_id",
+        "criteria_version_id",
+        "criteria_approval_state",
+        "criteria",
+        "candidate_assessments",
+        "ranking_explanation",
+        "material_tie_breakers",
+        "ranking_snapshot_id",
+        "warnings",
+        "prior_assessment_ids_preserved",
+        "approval_required",
+        "next_action"
+      ],
+      "type": "object"
+    },
+    "status": {
+      "enum": [
+        "success",
+        "error"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "result",
+    "message",
+    "metadata"
+  ],
+  "type": "object"
+}

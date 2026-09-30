@@ -1,0 +1,140 @@
+{
+  "workflow": {
+    "nodes": [
+      {"id":"input","type":"Input","label":"Recruitment Request","nodeCategory":"input"},
+      {"id":"manager","type":"Agent","label":"Recruitment Orchestrator","nodeCategory":"text","description":"Manager agent that routes recruitment intake, screening, ranking, approval, and scheduling tasks.","agent_id":"6abc7bc621093ae263023121"},
+      {"id":"gmail_intake","type":"Agent","label":"Gmail Resume Intake","nodeCategory":"agent","agent_id":"6abc7b35263d4a0614bb8530"},
+      {"id":"outlook_intake","type":"Agent","label":"Outlook Resume Intake","nodeCategory":"agent","agent_id":"6abc7b5021093ae26302311d"},
+      {"id":"screener","type":"Agent","label":"Evidence-Based Screener","nodeCategory":"agent","agent_id":"6abc7b6bbb0e214159113204"},
+      {"id":"google_coordinator","type":"Agent","label":"Google Interview Coordinator","nodeCategory":"agent","agent_id":"6abc7b807f82a7619cd00537"},
+      {"id":"microsoft_coordinator","type":"Agent","label":"Microsoft Interview Coordinator","nodeCategory":"agent","agent_id":"6abc7b92d6b1df16df74f590"},
+      {"id":"output","type":"Output","label":"Recruitment Workflow Result","nodeCategory":"end"}
+    ],
+    "edges": [
+      {"source":"input","target":"manager"},
+      {"source":"manager","target":"gmail_intake"},
+      {"source":"manager","target":"outlook_intake"},
+      {"source":"manager","target":"screener"},
+      {"source":"manager","target":"google_coordinator"},
+      {"source":"manager","target":"microsoft_coordinator"},
+      {"source":"gmail_intake","target":"output"},
+      {"source":"outlook_intake","target":"output"},
+      {"source":"screener","target":"output"},
+      {"source":"google_coordinator","target":"output"},
+      {"source":"microsoft_coordinator","target":"output"}
+    ]
+  },
+  "agents": [
+    {
+      "agent_id":"6abc7bc621093ae263023121",
+      "workflow_node_id":"manager",
+      "type":"manager",
+      "name":"Recruitment Orchestrator",
+      "description":"Routes intake, screening, ranking, approval, and scheduling tasks; enforces human approval and returns a unified result to the app.",
+      "tools_data_sources":"Outputs from all sub-agents; role configuration; recruiter approval state",
+      "trigger":"New intake, screening request, rerank request, or approved interview slot",
+      "provider":"Anthropic",
+      "model":"anthropic/claude-sonnet-4-6",
+      "temperature":0.2,
+      "top_p":0.9,
+      "managed_agents":[
+        {"agent_id":"6abc7b35263d4a0614bb8530","name":"Gmail Resume Intake","usage_description":"Use for manual or configured intake runs that search the authorized Gmail scope and normalize likely application messages and resume attachments for recruiter review."},
+        {"agent_id":"6abc7b5021093ae26302311d","name":"Outlook Resume Intake","usage_description":"Use for manual or configured intake runs that search the authorized Microsoft Outlook scope and normalize likely application messages and resume attachments for recruiter review."},
+        {"agent_id":"6abc7b6bbb0e214159113204","name":"Evidence-Based Screener","usage_description":"Use when a recruiter requests criteria extraction, approved-criteria screening, explainable scorecards, ranking, or reranking for candidates within one role."},
+        {"agent_id":"6abc7b807f82a7619cd00537","name":"Google Interview Coordinator","usage_description":"Use for Google Calendar availability options or approved Google scheduling actions, with Gmail communication only after explicit recruiter approval of the exact slot and draft."},
+        {"agent_id":"6abc7b92d6b1df16df74f590","name":"Microsoft Interview Coordinator","usage_description":"Use for Microsoft Calendar availability options or approved Microsoft scheduling actions, with Outlook communication only after explicit recruiter approval of the exact slot and draft."}
+      ],
+      "tool_configs":[],
+      "response_schema_file":"response_schemas/recruitment_orchestrator.json"
+    },
+    {
+      "agent_id":"6abc7b35263d4a0614bb8530",
+      "workflow_node_id":"gmail_intake",
+      "type":"sub-agent",
+      "name":"Gmail Resume Intake",
+      "description":"Searches authorized Gmail scope for likely applications, retrieves relevant attachments, and returns normalized candidate-source records for recruiter review.",
+      "tools_data_sources":"gmail (composio)",
+      "trigger":"Manual inbox sync or configured intake run",
+      "provider":"Anthropic",
+      "model":"anthropic/claude-sonnet-4-6",
+      "temperature":0.1,
+      "top_p":0.9,
+      "tool_configs":[{"tool_name":"gmail","tool_source":"composio","action_names":["GMAIL_FETCH_EMAILS","GMAIL_FETCH_MESSAGE_BY_MESSAGE_ID","GMAIL_GET_ATTACHMENT"],"persist_auth":true,"server_id":"","provider_uuid":"","credential_id":""}],
+      "response_schema_file":"response_schemas/gmail_resume_intake.json"
+    },
+    {
+      "agent_id":"6abc7b5021093ae26302311d",
+      "workflow_node_id":"outlook_intake",
+      "type":"sub-agent",
+      "name":"Outlook Resume Intake",
+      "description":"Searches authorized Outlook scope for likely applications, retrieves relevant attachments, and returns normalized candidate-source records for recruiter review.",
+      "tools_data_sources":"MICROSOFT_OUTLOOK (aci)",
+      "trigger":"Manual inbox sync or configured intake run",
+      "provider":"Anthropic",
+      "model":"anthropic/claude-sonnet-4-6",
+      "temperature":0.1,
+      "top_p":0.9,
+      "tool_configs":[{"tool_name":"MICROSOFT_OUTLOOK","tool_source":"aci","action_names":["MICROSOFT_OUTLOOK__LIST_MESSAGES","MICROSOFT_OUTLOOK__GET_MESSAGE","MICROSOFT_OUTLOOK__LIST_MESSAGES_IN_FOLDER"],"persist_auth":true,"server_id":"","provider_uuid":"","credential_id":""}],
+      "response_schema_file":"response_schemas/outlook_resume_intake.json"
+    },
+    {
+      "agent_id":"6abc7b6bbb0e214159113204",
+      "workflow_node_id":"screener",
+      "type":"sub-agent",
+      "name":"Evidence-Based Screener",
+      "description":"Converts job descriptions into reviewable criteria, evaluates resumes only against approved criteria, cites evidence, records uncertainty, and produces comparable scorecards.",
+      "tools_data_sources":"Parsed job descriptions and resumes supplied by the app",
+      "trigger":"Recruiter starts screening or changes approved criteria",
+      "provider":"Anthropic",
+      "model":"anthropic/claude-sonnet-4-6",
+      "temperature":0.1,
+      "top_p":0.9,
+      "tool_configs":[],
+      "response_schema_file":"response_schemas/evidence_based_screener.json"
+    },
+    {
+      "agent_id":"6abc7b807f82a7619cd00537",
+      "workflow_node_id":"google_coordinator",
+      "type":"sub-agent",
+      "name":"Google Interview Coordinator",
+      "description":"Checks authorized Google Calendar availability, proposes time-zone-safe slots, and creates the event only after approval; uses Gmail for the approved communication.",
+      "tools_data_sources":"googlecalendar and gmail (composio)",
+      "trigger":"Recruiter requests options or approves a Google-based slot",
+      "provider":"Anthropic",
+      "model":"anthropic/claude-sonnet-4-6",
+      "temperature":0.1,
+      "top_p":0.9,
+      "tool_configs":[
+        {"tool_name":"googlecalendar","tool_source":"composio","action_names":["GOOGLECALENDAR_LIST_CALENDARS","GOOGLECALENDAR_FREE_BUSY_QUERY","GOOGLECALENDAR_FIND_FREE_SLOTS","GOOGLECALENDAR_CREATE_EVENT","GOOGLECALENDAR_UPDATE_EVENT","GOOGLECALENDAR_DELETE_EVENT"],"persist_auth":true,"server_id":"","provider_uuid":"","credential_id":""},
+        {"tool_name":"gmail","tool_source":"composio","action_names":["GMAIL_SEND_EMAIL"],"persist_auth":true,"server_id":"","provider_uuid":"","credential_id":""}
+      ],
+      "response_schema_file":"response_schemas/google_interview_coordinator.json"
+    },
+    {
+      "agent_id":"6abc7b92d6b1df16df74f590",
+      "workflow_node_id":"microsoft_coordinator",
+      "type":"sub-agent",
+      "name":"Microsoft Interview Coordinator",
+      "description":"Checks authorized Microsoft Calendar availability, proposes time-zone-safe slots, and creates the event only after approval; uses Outlook for the approved communication.",
+      "tools_data_sources":"MICROSOFT_CALENDAR and MICROSOFT_OUTLOOK (aci)",
+      "trigger":"Recruiter requests options or approves a Microsoft-based slot",
+      "provider":"Anthropic",
+      "model":"anthropic/claude-sonnet-4-6",
+      "temperature":0.1,
+      "top_p":0.9,
+      "tool_configs":[
+        {"tool_name":"MICROSOFT_CALENDAR","tool_source":"aci","action_names":["MICROSOFT_CALENDAR__LIST_CALENDARS","MICROSOFT_CALENDAR__LIST_CALENDAR_VIEW","MICROSOFT_CALENDAR__GET_SCHEDULE","MICROSOFT_CALENDAR__CREATE_EVENT","MICROSOFT_CALENDAR__UPDATE_EVENT","MICROSOFT_CALENDAR__DELETE_EVENT"],"persist_auth":true,"server_id":"","provider_uuid":"","credential_id":""},
+        {"tool_name":"MICROSOFT_OUTLOOK","tool_source":"aci","action_names":["MICROSOFT_OUTLOOK__SEND","MICROSOFT_OUTLOOK__CREATE_MESSAGE_IN_FOLDER","MICROSOFT_OUTLOOK__GET_MESSAGE"],"persist_auth":true,"server_id":"","provider_uuid":"","credential_id":""}
+      ],
+      "response_schema_file":"response_schemas/microsoft_interview_coordinator.json"
+    }
+  ],
+  "response_schemas": {
+    "Recruitment Orchestrator":"response_schemas/recruitment_orchestrator.json",
+    "Gmail Resume Intake":"response_schemas/gmail_resume_intake.json",
+    "Outlook Resume Intake":"response_schemas/outlook_resume_intake.json",
+    "Evidence-Based Screener":"response_schemas/evidence_based_screener.json",
+    "Google Interview Coordinator":"response_schemas/google_interview_coordinator.json",
+    "Microsoft Interview Coordinator":"response_schemas/microsoft_interview_coordinator.json"
+  }
+}

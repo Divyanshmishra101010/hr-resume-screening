@@ -1,0 +1,339 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "message": {
+      "type": "string"
+    },
+    "metadata": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_name": {
+          "type": "string"
+        },
+        "provider": {
+          "enum": [
+            "microsoft"
+          ],
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string"
+        },
+        "tool_actions_used": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "agent_name",
+        "timestamp",
+        "provider",
+        "tool_actions_used"
+      ],
+      "type": "object"
+    },
+    "result": {
+      "additionalProperties": false,
+      "properties": {
+        "application_id": {
+          "type": "string"
+        },
+        "approval_reference": {
+          "type": "string"
+        },
+        "approval_state": {
+          "enum": [
+            "not_required",
+            "pending",
+            "approved",
+            "rejected",
+            "stale",
+            "invalid"
+          ],
+          "type": "string"
+        },
+        "audit_event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "candidate_id": {
+          "type": "string"
+        },
+        "constraints": {
+          "additionalProperties": false,
+          "properties": {
+            "buffer_minutes": {
+              "type": "integer"
+            },
+            "candidate_availability_source": {
+              "enum": [
+                "recruiter_entered",
+                "app_supplied",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            "date_range_end": {
+              "type": "string"
+            },
+            "date_range_start": {
+              "type": "string"
+            },
+            "duration_minutes": {
+              "type": "integer"
+            },
+            "interview_type": {
+              "type": "string"
+            },
+            "time_zone": {
+              "type": "string"
+            },
+            "working_hours_end": {
+              "type": "string"
+            },
+            "working_hours_start": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "interview_type",
+            "duration_minutes",
+            "buffer_minutes",
+            "date_range_start",
+            "date_range_end",
+            "working_hours_start",
+            "working_hours_end",
+            "time_zone",
+            "candidate_availability_source"
+          ],
+          "type": "object"
+        },
+        "event_id": {
+          "type": "string"
+        },
+        "event_title": {
+          "type": "string"
+        },
+        "meeting_link": {
+          "type": "string"
+        },
+        "message_id": {
+          "type": "string"
+        },
+        "message_preview": {
+          "type": "string"
+        },
+        "next_action": {
+          "enum": [
+            "select_slot",
+            "approve_and_send",
+            "refresh_options",
+            "review_error",
+            "none"
+          ],
+          "type": "string"
+        },
+        "participants": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "calendar_id": {
+                "type": "string"
+              },
+              "display_name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "participant_id": {
+                "type": "string"
+              },
+              "role": {
+                "enum": [
+                  "candidate",
+                  "recruiter",
+                  "hiring_manager",
+                  "interviewer",
+                  "other"
+                ],
+                "type": "string"
+              },
+              "time_zone": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "participant_id",
+              "display_name",
+              "email",
+              "role",
+              "time_zone",
+              "calendar_id"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "proposed_slots": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "calendar_ids_checked": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "end": {
+                "type": "string"
+              },
+              "freshness": {
+                "type": "string"
+              },
+              "participant_availability_confirmed": {
+                "type": "boolean"
+              },
+              "provider": {
+                "enum": [
+                  "microsoft"
+                ],
+                "type": "string"
+              },
+              "slot_id": {
+                "type": "string"
+              },
+              "start": {
+                "type": "string"
+              },
+              "status": {
+                "enum": [
+                  "proposed",
+                  "selected",
+                  "stale",
+                  "invalid"
+                ],
+                "type": "string"
+              },
+              "time_zone": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "slot_id",
+              "start",
+              "end",
+              "time_zone",
+              "provider",
+              "calendar_ids_checked",
+              "participant_availability_confirmed",
+              "freshness",
+              "status"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "provider": {
+          "enum": [
+            "microsoft"
+          ],
+          "type": "string"
+        },
+        "role_id": {
+          "type": "string"
+        },
+        "scheduling_draft_id": {
+          "type": "string"
+        },
+        "selected_slot_id": {
+          "type": "string"
+        },
+        "warnings": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "requires_human_review": {
+                "type": "boolean"
+              },
+              "severity": {
+                "enum": [
+                  "info",
+                  "warning",
+                  "blocking"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "severity",
+              "requires_human_review"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "workflow_status": {
+          "enum": [
+            "options_ready",
+            "approval_required",
+            "approved_and_created",
+            "stale_requires_refresh",
+            "blocked",
+            "error"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "workflow_status",
+        "role_id",
+        "candidate_id",
+        "application_id",
+        "scheduling_draft_id",
+        "provider",
+        "approval_state",
+        "approval_reference",
+        "participants",
+        "constraints",
+        "proposed_slots",
+        "selected_slot_id",
+        "event_id",
+        "message_id",
+        "meeting_link",
+        "event_title",
+        "message_preview",
+        "warnings",
+        "audit_event_ids",
+        "next_action"
+      ],
+      "type": "object"
+    },
+    "status": {
+      "enum": [
+        "success",
+        "error"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "result",
+    "message",
+    "metadata"
+  ],
+  "type": "object"
+}

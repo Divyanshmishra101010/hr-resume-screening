@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HireFlow Agent — Product Mockup</title>
+<style>
+:root{
+  --bg:#eef0f3;--paper:#fff;--ink:#17191d;--muted:#6b7079;--line:#dde0e5;
+  --soft:#f6f7f8;--accent:#24272d;--green:#257a59;--green-bg:#e8f5ee;
+  --amber:#8a5d16;--amber-bg:#fff4dc;--blue:#2b5da8;--blue-bg:#eaf1fb;
+  --danger:#a33d3d;--shadow:0 18px 48px rgba(28,32,38,.10);
+}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Montserrat,Inter,Arial,sans-serif}
+.deck{max-width:1440px;margin:0 auto;padding:26px}.frame{margin:0 0 34px;border:1px solid #cfd3d9;background:var(--paper);box-shadow:var(--shadow)}
+.band{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#dadee4;color:#333840;font-size:12px;font-weight:700;letter-spacing:.02em}
+.app{min-height:760px;background:#f8f9fa}.shell{display:grid;grid-template-columns:222px 1fr;min-height:760px}
+.sidebar{padding:22px 15px;background:#191b1f;color:#d9dde3}.brand{display:flex;align-items:center;gap:10px;padding:0 8px 25px;color:#fff;font-size:17px;font-weight:800}
+.logo{width:28px;height:28px;display:grid;place-items:center;background:#fff;color:#17191d;border-radius:7px}
+.nav-label{padding:16px 10px 7px;color:#777d88;font-size:10px;text-transform:uppercase;letter-spacing:.11em}
+.nav{display:flex;gap:10px;align-items:center;margin:4px 0;padding:10px;border-radius:7px;color:#aeb4bd}.nav.active{background:#30343b;color:#fff}.dot{width:7px;height:7px;border-radius:50%;background:#7b818b}
+.main{min-width:0}.top{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;background:#fff;border-bottom:1px solid var(--line)}
+.search{width:310px;padding:10px 13px;border:1px solid var(--line);border-radius:7px;color:#858a92}.actions{display:flex;gap:9px;align-items:center}
+.iconbtn,.avatar{display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--line);border-radius:7px;background:#fff}.avatar{border-radius:50%;background:#272a30;color:#fff;font-weight:700}
+.content{padding:25px 28px}.title-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px}h1{margin:0 0 5px;font-size:25px;letter-spacing:-.03em}h2{margin:0 0 6px;font-size:17px}p{margin:0;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 14px;border:1px solid var(--line);border-radius:7px;background:#fff;font-weight:700}.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}.btn.ghost{background:transparent}
+.pill{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;background:#eceef1;color:#555b64;font-size:11px;font-weight:700}.pill.green{background:var(--green-bg);color:var(--green)}.pill.amber{background:var(--amber-bg);color:var(--amber)}.pill.blue{background:var(--blue-bg);color:var(--blue)}
+.card{background:#fff;border:1px solid var(--line);border-radius:9px}.card-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.metric{padding:16px}.metric b{display:block;font-size:23px;margin-top:7px}.muted{color:var(--muted)}.tiny{font-size:11px}
+.authapp{display:grid;grid-template-columns:1fr 1fr;min-height:720px}.auth-story{position:relative;overflow:hidden;padding:58px;background:#1d2025;color:#fff}.auth-story:after{content:"";position:absolute;width:460px;height:460px;right:-190px;bottom:-220px;border:90px solid #3d424b;border-radius:50%}.auth-story h1{max-width:520px;margin-top:100px;font-size:44px;line-height:1.08}.auth-story p{max-width:500px;margin-top:18px;color:#b9bec7;font-size:16px}.quote{position:absolute;left:58px;bottom:55px;z-index:1;width:390px;padding:18px;border-left:2px solid #7b828d;color:#d8dce2}
+.auth-panel{display:grid;place-items:center;padding:50px}.auth-box{width:390px}.eyebrow{color:#777d86;text-transform:uppercase;letter-spacing:.12em;font-size:10px;font-weight:800}.tabs{display:flex;margin:24px 0;border-bottom:1px solid var(--line)}.tab{flex:1;padding:12px;text-align:center;color:var(--muted)}.tab.active{border-bottom:2px solid #202328;color:#202328;font-weight:800}.field{margin:14px 0}.field label{display:block;margin-bottom:6px;font-size:12px;font-weight:700}.input{width:100%;padding:12px;border:1px solid #ccd0d6;border-radius:7px;color:#8b9098}.full{width:100%}.legal{margin-top:14px;font-size:11px;color:#7b8088}
+.job-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.job-list{padding:5px 18px}.job-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:17px 0;border-bottom:1px solid var(--line)}.job-row:last-child{border:0}.job-meta{display:flex;gap:8px;margin-top:8px}.intake{padding:18px}.drop{margin:14px 0;padding:30px 16px;text-align:center;border:1px dashed #afb4bc;border-radius:8px;background:var(--soft)}.connect{display:grid;grid-template-columns:1fr 1fr;gap:10px}.provider{padding:13px;border:1px solid var(--line);border-radius:8px}.provider b{display:block;margin-bottom:4px}.sync{display:flex;align-items:center;justify-content:space-between;margin-top:15px;padding:12px;background:var(--soft);border-radius:7px}
+.rank-layout{display:grid;grid-template-columns:minmax(0,1fr) 355px;gap:17px}.filters{display:flex;gap:8px;margin:0 0 13px}.filter{padding:8px 11px;border:1px solid var(--line);border-radius:6px;background:#fff;color:#555b63}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line)}th{padding:11px 12px;text-align:left;background:#f3f4f6;color:#6a7079;font-size:10px;text-transform:uppercase;letter-spacing:.06em}td{padding:14px 12px;border-top:1px solid var(--line)}tr.selected td{background:#f1f3f5}.score{font-size:17px;font-weight:800}.candidate{display:flex;gap:10px;align-items:center}.candidate .avatar{width:31px;height:31px;font-size:11px}.drawer{padding:18px}.drawer-top{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:16px;border-bottom:1px solid var(--line)}.criterion{padding:14px 0;border-bottom:1px solid var(--line)}.crit-top{display:flex;justify-content:space-between;font-weight:700}.evidence{margin-top:7px;padding:9px 10px;border-left:2px solid #90969f;background:#f6f7f8;color:#555b63;font-size:12px}.scorebar{display:flex;gap:3px;margin-top:8px}.scorebar i{height:4px;flex:1;background:#dfe2e6}.scorebar i.on{background:#363a41}
+.schedule{display:grid;grid-template-columns:350px 1fr;gap:18px}.constraints{padding:18px}.summary{padding:14px 0;border-bottom:1px solid var(--line)}.summary:last-child{border:0}.face{display:flex;gap:11px;align-items:center}.bigavatar{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#282b31;color:#fff;font-weight:800}.slots{padding:18px}.day{margin-top:16px}.day h3{margin:0 0 9px;font-size:13px}.slot{display:grid;grid-template-columns:110px 1fr auto;align-items:center;gap:14px;margin:7px 0;padding:13px;border:1px solid var(--line);border-radius:8px}.slot.selected{border:2px solid #292c32;background:#fafafa}.provider-mark{font-size:11px;font-weight:800;color:#4d535c}.approval{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding:16px;background:#edeff2;border:1px solid #d7dade;border-radius:8px}.approval strong{display:block;margin-bottom:3px}
+@media(max-width:900px){.deck{padding:10px}.shell{grid-template-columns:1fr}.sidebar{display:none}.authapp{grid-template-columns:1fr}.auth-story{display:none}.job-layout,.rank-layout,.schedule{grid-template-columns:1fr}.drawer{display:none}.grid3{grid-template-columns:1fr}.connect{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="deck">
+
+<section class="frame">
+  <header class="band"><span>Screen 1 of 4 · Login + Sign Up · Secure entry to the organization workspace</span><span>Authentication gated</span></header>
+  <div class="app authapp">
+    <div class="auth-story">
+      <div class="brand"><span class="logo">H</span> HireFlow</div>
+      <h1>Hiring evidence,<br>not black boxes.</h1>
+      <p>Screen candidates consistently, understand every score, and keep people in control of every hiring and scheduling decision.</p>
+      <div class="quote">“Every recommendation links back to approved criteria and evidence from the candidate’s resume.”</div>
+    </div>
+    <div class="auth-panel">
+      <div class="auth-box">
+        <div class="eyebrow">Recruitment operations</div>
+        <h1 style="margin-top:10px">Welcome to HireFlow</h1>
+        <p>Sign in or create your organization workspace.</p>
+        <div class="tabs"><div class="tab active">Sign in</div><div class="tab">Create account</div></div>
+        <div class="field"><label>Work email</label><div class="input">name@company.com</div></div>
+        <div class="field"><label>Password</label><div class="input">••••••••••••</div></div>
+        <div style="display:flex;justify-content:space-between;margin:9px 0 20px"><span class="tiny muted">□ Remember me</span><span class="tiny">Forgot password?</span></div>
+        <button class="btn primary full">Sign in securely</button>
+        <div class="legal">HireFlow supports human decision-making. It does not make autonomous hiring decisions or score protected characteristics.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="frame">
+  <header class="band"><span>Screen 2 of 4 · Jobs & Intake · Configure a role and collect candidate materials</span><span>Uploads + Gmail + Outlook</span></header>
+  <div class="app shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="logo">H</span> HireFlow</div>
+      <div class="nav active">▦ <span>Jobs</span></div><div class="nav">◎ <span>Candidates</span></div><div class="nav">◷ <span>Interviews</span></div>
+      <div class="nav-label">Sources</div><div class="nav">↧ <span>Inbox intake</span></div><div class="nav">⌁ <span>Integrations</span></div>
+      <div class="nav-label">Governance</div><div class="nav">≡ <span>Audit log</span></div>
+    </aside>
+    <main class="main">
+      <div class="top"><div class="search">⌕ Search jobs, candidates, interviews</div><div class="actions"><span class="pill green">● 4 integrations healthy</span><div class="iconbtn">◐</div><div class="avatar">AR</div></div></div>
+      <div class="content">
+        <div class="title-row"><div><h1>Jobs & intake</h1><p>Manage open roles and bring new applications into review.</p></div><button class="btn primary">＋ New role</button></div>
+        <div class="grid3" style="margin-bottom:18px">
+          <div class="card metric"><span class="muted tiny">OPEN ROLES</span><b>6</b><span class="tiny muted">2 need criteria approval</span></div>
+          <div class="card metric"><span class="muted tiny">NEW APPLICATIONS</span><b>28</b><span class="tiny muted">Since Monday</span></div>
+          <div class="card metric"><span class="muted tiny">AWAITING REVIEW</span><b>11</b><span class="tiny muted">3 possible duplicates</span></div>
+        </div>
+        <div class="job-layout">
+          <div class="card">
+            <div class="card-head"><div><h2>Active roles</h2><span class="tiny muted">Updated a few seconds ago</span></div><button class="btn">Filter</button></div>
+            <div class="job-list">
+              <div class="job-row"><div><b>Senior Product Designer</b><div class="job-meta"><span class="pill green">Criteria approved</span><span class="tiny muted">18 candidates · 5 shortlisted</span></div></div><b>82%</b></div>
+              <div class="job-row"><div><b>Revenue Operations Manager</b><div class="job-meta"><span class="pill amber">Review criteria</span><span class="tiny muted">7 candidates · 7 unscreened</span></div></div><b>—</b></div>
+              <div class="job-row"><div><b>Frontend Engineer</b><div class="job-meta"><span class="pill green">Criteria approved</span><span class="tiny muted">24 candidates · 6 shortlisted</span></div></div><b>88%</b></div>
+              <div class="job-row"><div><b>Customer Success Lead</b><div class="job-meta"><span class="pill blue">Screening 6 files</span><span class="tiny muted">12 candidates</span></div></div><b>64%</b></div>
+            </div>
+          </div>
+          <div class="card intake">
+            <div style="display:flex;justify-content:space-between"><div><h2>Add candidates</h2><p class="tiny">Revenue Operations Manager</p></div><span class="pill amber">Criteria pending</span></div>
+            <div class="drop"><b>Drop resumes here</b><p class="tiny" style="margin:5px">PDF or DOCX · up to 20 files</p><button class="btn" style="margin-top:9px">Browse files</button></div>
+            <p class="tiny" style="margin-bottom:8px;font-weight:800">CONNECTED INBOXES</p>
+            <div class="connect">
+              <div class="provider"><b>G Gmail</b><span class="tiny muted">recruiting@acme.co</span><div class="sync"><span class="tiny">12 new</span><b>Sync</b></div></div>
+              <div class="provider"><b>▦ Outlook</b><span class="tiny muted">talent@acme.co</span><div class="sync"><span class="tiny">5 new</span><b>Sync</b></div></div>
+            </div>
+            <div class="sync"><span><b>3 possible duplicates</b><br><span class="tiny muted">Review before screening</span></span><button class="btn">Review</button></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</section>
+
+<section class="frame">
+  <header class="band"><span>Screen 3 of 4 · Candidate Ranking · Compare evidence and inspect every score</span><span>Human decision support</span></header>
+  <div class="app shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="logo">H</span> HireFlow</div>
+      <div class="nav">▦ <span>Jobs</span></div><div class="nav active">◎ <span>Candidates</span></div><div class="nav">◷ <span>Interviews</span></div>
+      <div class="nav-label">Sources</div><div class="nav">↧ <span>Inbox intake</span></div><div class="nav">⌁ <span>Integrations</span></div>
+      <div class="nav-label">Governance</div><div class="nav">≡ <span>Audit log</span></div>
+    </aside>
+    <main class="main">
+      <div class="top"><div class="search">⌕ Search candidates</div><div class="actions"><span class="pill green">Criteria v3 approved</span><div class="iconbtn">◐</div><div class="avatar">AR</div></div></div>
+      <div class="content">
+        <div class="title-row"><div><span class="tiny muted">JOBS / SENIOR PRODUCT DESIGNER</span><h1 style="margin-top:5px">Candidate ranking</h1><p>18 candidates · ranked against 7 approved criteria</p></div><div><button class="btn">Edit criteria</button> <button class="btn primary">Rerun screening</button></div></div>
+        <div class="rank-layout">
+          <div>
+            <div class="filters"><span class="filter">All stages ▾</span><span class="filter">Score ▾</span><span class="filter">Missing requirements ▾</span><span class="filter">Source ▾</span></div>
+            <table>
+              <thead><tr><th>Rank</th><th>Candidate</th><th>Score</th><th>Required</th><th>Confidence</th><th>Stage</th></tr></thead>
+              <tbody>
+                <tr class="selected"><td>01</td><td><div class="candidate"><div class="avatar">MC</div><span><b>Maya Chen</b><br><span class="tiny muted">Gmail · 2h ago</span></span></div></td><td><span class="score">91</span>/100</td><td><span class="pill green">5 of 5</span></td><td>High</td><td><span class="pill blue">Review</span></td></tr>
+                <tr><td>02</td><td><div class="candidate"><div class="avatar">JL</div><span><b>Jordan Lee</b><br><span class="tiny muted">Upload · Today</span></span></div></td><td><span class="score">87</span>/100</td><td><span class="pill green">5 of 5</span></td><td>High</td><td><span class="pill">New</span></td></tr>
+                <tr><td>03</td><td><div class="candidate"><div class="avatar">SO</div><span><b>Sam Okafor</b><br><span class="tiny muted">Outlook · Today</span></span></div></td><td><span class="score">81</span>/100</td><td><span class="pill amber">4 of 5</span></td><td>Medium</td><td><span class="pill">New</span></td></tr>
+                <tr><td>04</td><td><div class="candidate"><div class="avatar">EP</div><span><b>Elena Petrov</b><br><span class="tiny muted">Upload · Yesterday</span></span></div></td><td><span class="score">78</span>/100</td><td><span class="pill green">5 of 5</span></td><td>Medium</td><td><span class="pill amber">Needs review</span></td></tr>
+              </tbody>
+            </table>
+            <p class="tiny muted" style="margin-top:10px">Scores summarize resume evidence against this role’s approved criteria. They are not hiring decisions.</p>
+          </div>
+          <aside class="card drawer">
+            <div class="drawer-top"><div><span class="pill green">91 · High confidence</span><h2 style="margin-top:10px">Maya Chen</h2><p class="tiny">Senior Product Designer</p></div><button class="btn">•••</button></div>
+            <div class="criterion"><div class="crit-top"><span>Product strategy</span><span>4 / 4</span></div><div class="scorebar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div><div class="evidence">“Led zero-to-one discovery and product strategy for a B2B workflow platform…” <b>Resume · p1</b></div></div>
+            <div class="criterion"><div class="crit-top"><span>Design systems</span><span>4 / 4</span></div><div class="scorebar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div><div class="evidence">“Built and governed a 60-component design system used by 8 squads.” <b>Resume · p1</b></div></div>
+            <div class="criterion"><div class="crit-top"><span>People leadership</span><span>3 / 4</span></div><div class="scorebar"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div><p class="tiny muted" style="margin-top:7px">Clear mentoring evidence; direct management scope is not stated.</p></div>
+            <div style="display:flex;gap:8px;margin-top:16px"><button class="btn">Hold</button><button class="btn primary" style="flex:1">Advance to interview</button></div>
+          </aside>
+        </div>
+      </div>
+    </main>
+  </div>
+</section>
+
+<section class="frame">
+  <header class="band"><span>Screen 4 of 4 · Interview Coordination · Recommend cross-provider slots for approval</span><span>No invitation before approval</span></header>
+  <div class="app shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="logo">H</span> HireFlow</div>
+      <div class="nav">▦ <span>Jobs</span></div><div class="nav">◎ <span>Candidates</span></div><div class="nav active">◷ <span>Interviews</span></div>
+      <div class="nav-label">Sources</div><div class="nav">↧ <span>Inbox intake</span></div><div class="nav">⌁ <span>Integrations</span></div>
+      <div class="nav-label">Governance</div><div class="nav">≡ <span>Audit log</span></div>
+    </aside>
+    <main class="main">
+      <div class="top"><div class="search">⌕ Search interviews</div><div class="actions"><span class="pill green">● Calendars current</span><div class="iconbtn">◐</div><div class="avatar">AR</div></div></div>
+      <div class="content">
+        <div class="title-row"><div><span class="tiny muted">INTERVIEWS / DRAFT</span><h1 style="margin-top:5px">Coordinate interview</h1><p>Availability checked across Google Calendar and Microsoft 365.</p></div><button class="btn">Save draft</button></div>
+        <div class="schedule">
+          <div class="card constraints">
+            <div class="face"><div class="bigavatar">MC</div><div><h2>Maya Chen</h2><p class="tiny">Senior Product Designer · Portfolio interview</p></div></div>
+            <div class="summary"><span class="tiny muted">DURATION</span><b style="float:right">60 minutes</b></div>
+            <div class="summary"><span class="tiny muted">DATE RANGE</span><b style="float:right">Oct 5–9</b></div>
+            <div class="summary"><span class="tiny muted">CANDIDATE TIME ZONE</span><b style="float:right">Pacific time</b></div>
+            <div class="summary"><span class="tiny muted">PARTICIPANTS</span><div style="margin-top:10px"><span class="pill blue">G Priya · Google</span> <span class="pill">▦ Alex · Microsoft</span></div></div>
+            <div class="summary"><span class="tiny muted">CONSTRAINTS</span><p class="tiny" style="margin-top:6px">9am–4pm candidate time · 15 min buffers · avoid Friday</p></div>
+            <button class="btn full" style="margin-top:16px">Edit constraints</button>
+          </div>
+          <div class="card slots">
+            <div style="display:flex;justify-content:space-between;align-items:center"><div><h2>Recommended times</h2><p class="tiny">3 mutual openings · refreshed 1 min ago</p></div><button class="btn">↻ Refresh</button></div>
+            <div class="day"><h3>Tuesday, October 6</h3>
+              <div class="slot selected"><b>10:30 AM</b><span><b>Best fit</b><br><span class="tiny muted">10:30 PT · 1:30 ET · all participants free</span></span><span class="provider-mark">G + ▦</span></div>
+              <div class="slot"><b>2:00 PM</b><span><b>Available</b><br><span class="tiny muted">2:00 PT · 5:00 ET · all participants free</span></span><span class="provider-mark">G + ▦</span></div>
+            </div>
+            <div class="day"><h3>Wednesday, October 7</h3>
+              <div class="slot"><b>11:00 AM</b><span><b>Available</b><br><span class="tiny muted">11:00 PT · 2:00 ET · all participants free</span></span><span class="provider-mark">G + ▦</span></div>
+            </div>
+            <div class="approval">
+              <div><strong>Tuesday, Oct 6 · 10:30–11:30 AM PT</strong><span class="tiny muted">Draft only · event and invitations have not been created</span></div>
+              <button class="btn primary">Approve &amp; send</button>
+            </div>
+            <p class="tiny muted" style="margin-top:11px">Final approval will create the event in Priya’s Google Calendar and send invitations to Maya, Priya, and Alex.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

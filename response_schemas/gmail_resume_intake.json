@@ -1,0 +1,271 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "message": {
+      "type": "string"
+    },
+    "metadata": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_name": {
+          "type": "string"
+        },
+        "source_provider": {
+          "enum": [
+            "gmail"
+          ],
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string"
+        },
+        "tool_actions_used": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "agent_name",
+        "timestamp",
+        "source_provider",
+        "tool_actions_used"
+      ],
+      "type": "object"
+    },
+    "result": {
+      "additionalProperties": false,
+      "properties": {
+        "approval_required": {
+          "type": "boolean"
+        },
+        "candidate_source_records": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "attachment_filename": {
+                "type": "string"
+              },
+              "attachment_id": {
+                "type": "string"
+              },
+              "candidate_id": {
+                "type": "string"
+              },
+              "duplicate_candidate_ids": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "evidence_provenance": {
+                "type": "string"
+              },
+              "extracted_text_status": {
+                "enum": [
+                  "not_requested",
+                  "extracted",
+                  "unreadable",
+                  "missing"
+                ],
+                "type": "string"
+              },
+              "identity": {
+                "additionalProperties": false,
+                "properties": {
+                  "display_name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "display_name",
+                  "email"
+                ],
+                "type": "object"
+              },
+              "message_id": {
+                "type": "string"
+              },
+              "parse_status": {
+                "enum": [
+                  "parsed",
+                  "partial",
+                  "failed",
+                  "not_run"
+                ],
+                "type": "string"
+              },
+              "received_at": {
+                "type": "string"
+              },
+              "recruiter_review_required": {
+                "type": "boolean"
+              },
+              "sender_email": {
+                "type": "string"
+              },
+              "source_id": {
+                "type": "string"
+              },
+              "source_locator": {
+                "type": "string"
+              },
+              "source_provider": {
+                "enum": [
+                  "gmail"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "candidate_id",
+              "source_id",
+              "source_provider",
+              "message_id",
+              "attachment_id",
+              "attachment_filename",
+              "sender_email",
+              "received_at",
+              "identity",
+              "source_locator",
+              "extracted_text_status",
+              "parse_status",
+              "duplicate_candidate_ids",
+              "recruiter_review_required",
+              "evidence_provenance"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "duplicate_candidates": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "candidate_id": {
+                "type": "string"
+              },
+              "confidence": {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              "possible_match_candidate_id": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              },
+              "requires_human_review": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "candidate_id",
+              "possible_match_candidate_id",
+              "reason",
+              "confidence",
+              "requires_human_review"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "next_action": {
+          "enum": [
+            "review_intake",
+            "resolve_duplicates",
+            "run_screening",
+            "retry_intake",
+            "none"
+          ],
+          "type": "string"
+        },
+        "role_id": {
+          "type": "string"
+        },
+        "source_provider": {
+          "enum": [
+            "gmail"
+          ],
+          "type": "string"
+        },
+        "warnings": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "requires_human_review": {
+                "type": "boolean"
+              },
+              "severity": {
+                "enum": [
+                  "info",
+                  "warning",
+                  "blocking"
+                ],
+                "type": "string"
+              },
+              "source_id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "severity",
+              "source_id",
+              "requires_human_review"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "workflow_status": {
+          "enum": [
+            "intake_completed",
+            "no_matches",
+            "approval_required",
+            "blocked",
+            "error"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "workflow_status",
+        "role_id",
+        "source_provider",
+        "candidate_source_records",
+        "duplicate_candidates",
+        "warnings",
+        "approval_required",
+        "next_action"
+      ],
+      "type": "object"
+    },
+    "status": {
+      "enum": [
+        "success",
+        "error"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "result",
+    "message",
+    "metadata"
+  ],
+  "type": "object"
+}
