@@ -31,7 +31,24 @@ export const POST = authMiddleware(async (req: NextRequest) => {
     if (typeof body.overall_score === 'number') {
       ;[assessment] = await getDb().insert(assessments).values({ organization_id: ctx.organizationId, application_id: effectiveApplication.id, assessment_type: 'evidence_based_screening', status: 'completed', overall_score: String(body.overall_score), notes: typeof body.notes === 'string' ? body.notes : 'Direct upload screening completed.', assessed_by_user_id: ctx.userId }).returning()
       if (assessment && Array.isArray(body.criterion_scores)) {
-        const rows = body.criterion_scores.filter((item): item is Record<string, unknown> => !!item && typeof item === 'object' && typeof (item as Record<string, unknown>).criterion_id === 'string').map((item) => ({ assessment_id: assessment.id, job_criterion_id: String(item.criterion_id), score: String(typeof item.score === 'number' ? item.score : 0), notes: typeof item.reasoning === 'string' ? item.reasoning : null }))
+        const existingCriteria = await getDb().select({ id: job_criteria.id, name: job_criteria.name }).from(job_criteria).where(eq(job_criteria.job_id, jobId))
+        const rows = body.criterion_scores
+          .filter((item): item is Record<string, unknown> => !!item && typeof item === 'object')
+          .map((item) => {
+            const rawId = String(item.criterion_id ?? '').trim()
+            const rawName = typeof item.name === 'string' ? item.name.trim().toLowerCase() : ''
+            const matched = existingCriteria.find((c) => c.id === rawId) ||
+              existingCriteria.find((c) => c.name.trim().toLowerCase() === rawId.toLowerCase()) ||
+              (rawName ? existingCriteria.find((c) => c.name.trim().toLowerCase() === rawName) : undefined)
+            if (!matched) return null
+            return {
+              assessment_id: assessment.id,
+              job_criterion_id: matched.id,
+              score: String(typeof item.score === 'number' ? item.score : 0),
+              notes: typeof item.reasoning === 'string' ? item.reasoning : null,
+            }
+          })
+          .filter((row): row is NonNullable<typeof row> => row !== null)
         if (rows.length) await getDb().insert(criterion_scores).values(rows)
       }
     }
